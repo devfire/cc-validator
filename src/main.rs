@@ -61,7 +61,22 @@ fn test_invalid_cc_number() {
     assert!(!luhn("8273 1232 7352 0569"));
 }
 
+fn remove_whitespace(s: &str) -> String {
+    s.split_whitespace().collect()
+}
+
 #[allow(dead_code)]
 fn main() {
-    luhn("4539 3195 0343 6476");
+    let cc: &str = "4539 3195 0343 6476";
+    // let reversed = remove_whitespace(&cc);
+
+
+    let reversed_str = remove_whitespace(&cc);
+    
+
+    while let Some(ch) = reversed_str.chars().next() {
+        // reversed_str.nth(1);
+        print!("{}", ch);
+    }
+    // luhn("4539 3195 0343 6476");
 }
