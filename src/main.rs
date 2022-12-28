@@ -4,21 +4,51 @@
 pub fn luhn(cc_number: &str) -> bool {
     // todo!()
 
-    if !cc_number.chars().all(char::is_numeric) {
-        false // there were non digits in cc_number, bailing
-    } else if cc_number.len() < 2 {
+    // first, let's remove all whitespace
+    let cc: String = cc_number.split_whitespace().collect();
+    println!("With whitespace removed: {}", cc);
+
+    if !cc.chars().all(char::is_numeric) {
+        false // non numeric chars found, bailing
+    } else if cc.len() < 2 {
         false // numbers under 2 digits, bailing
-    } else if last_digit(&cc_number) == 0 {
+    } else if !last_digit(cc) == 0 {
+        false
+    } else {
         true
-    } else {false}
+    }
 }
 
-fn last_digit(cc: &str) -> i32 {
- 
-    let mut reversed = cc.chars().rev().clone();
-    while let Some(ch) = reversed.next() {
-        reversed.nth(1);
-        dbg!("{}", ch);
+fn sum_of_digits(mut number: i32) -> i32 {
+    let mut sum = 0;
+    while number != 0 {
+        sum += number % 10;
+        number = number / 10;
+    }
+    sum // return sum of digits
+}
+
+fn last_digit(cc: String) -> i32 {
+    let reversed = cc.chars().rev();
+    // println!("Reversed: {}", reversed);
+    for (i, ch) in reversed.into_iter().enumerate() {
+        let mut n: i32 = ch as i32 - 0x30; // "cast" a char as an int
+
+        if i % 2 != 0 {
+            
+            // we only process odd digits
+            n = n * 2; // double every odd digit
+            print!("position: {} char: {} ", i, n);
+            
+            // if the doubled number is two digits, we need to sum the digits
+            // https://www.geeksforgeeks.org/program-for-sum-of-the-digits-of-a-given-number/
+            if n > 9 {
+                // println!("Two digits detected, adding");
+                let added = sum_of_digits(n);
+                println!("summed: {}", added);
+            } // single digit, proceed with n
+            
+        }
     }
 
     1
@@ -67,16 +97,14 @@ fn remove_whitespace(s: &str) -> String {
 
 #[allow(dead_code)]
 fn main() {
-    let cc: &str = "4539 3195 0343 6476";
-    // let reversed = remove_whitespace(&cc);
+    // let cc: &str = "4539 3195 0343 6476";
+    // // let reversed = remove_whitespace(&cc);
 
+    // let reversed_str = remove_whitespace(&cc);
 
-    let reversed_str = remove_whitespace(&cc);
-    
-
-    while let Some(ch) = reversed_str.chars().next() {
-        // reversed_str.nth(1);
-        print!("{}", ch);
-    }
-    // luhn("4539 3195 0343 6476");
+    // while let Some(ch) = reversed_str.chars().next() {
+    //     // reversed_str.nth(1);
+    //     print!("{}", ch);
+    // }
+    luhn("4539 3195 0343 6476");
 }
