@@ -33,23 +33,14 @@ fn last_digit(cc: String) -> i32 {
         if i % 2 != 0 {
             // check for odd numbered position
             n = n * 2; // double every odd digit
-
-            // if the doubled number is two digits, we need to sum the digits before adding
-            // https://www.geeksforgeeks.org/program-for-sum-of-the-digits-of-a-given-number/
-            if n > 9 {
-                sum_of_all_digits += sum_of_digits(n);
-            } else {
-                // doubled num is a single digit, add it
-                sum_of_all_digits += n;
-            }
-        } else {
-            // even position, add it without doubling
-            sum_of_all_digits += n;
         }
+
+        // if the doubled number is two digits, we need to sum the digits before adding
+        // https://www.geeksforgeeks.org/program-for-sum-of-the-digits-of-a-given-number/
+        sum_of_all_digits += sum_of_digits(n);
     }
-    let last = sum_of_all_digits % 10;
     // return the last digit
-    last
+    sum_of_all_digits % 10
 }
 
 #[test]
