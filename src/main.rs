@@ -2,17 +2,11 @@
 #![allow(unused_variables, dead_code)]
 
 pub fn luhn(cc_number: &str) -> bool {
-    // todo!()
-
     // first, let's remove all whitespace
     let cc: String = cc_number.split_whitespace().collect();
     println!("With whitespace removed: {}", cc);
 
-    if !cc.chars().all(char::is_numeric) {
-        false // non numeric chars found, bailing
-    } else if cc.len() < 2 {
-        false // numbers under 2 digits, bailing
-    } else if !last_digit(cc) == 0 {
+    if !cc.chars().all(char::is_numeric) || cc.len() < 2 || last_digit(cc) > 0 {
         false
     } else {
         true
@@ -29,29 +23,33 @@ fn sum_of_digits(mut number: i32) -> i32 {
 }
 
 fn last_digit(cc: String) -> i32 {
+    //first, let's reverse the string.
     let reversed = cc.chars().rev();
-    // println!("Reversed: {}", reversed);
+    let mut sum_of_all_digits = 0; //init the sum to 0
+
     for (i, ch) in reversed.into_iter().enumerate() {
         let mut n: i32 = ch as i32 - 0x30; // "cast" a char as an int
 
         if i % 2 != 0 {
-            
-            // we only process odd digits
+            // check for odd numbered position
             n = n * 2; // double every odd digit
-            print!("position: {} char: {} ", i, n);
-            
-            // if the doubled number is two digits, we need to sum the digits
+
+            // if the doubled number is two digits, we need to sum the digits before adding
             // https://www.geeksforgeeks.org/program-for-sum-of-the-digits-of-a-given-number/
             if n > 9 {
-                // println!("Two digits detected, adding");
-                let added = sum_of_digits(n);
-                println!("summed: {}", added);
-            } // single digit, proceed with n
-            
+                sum_of_all_digits += sum_of_digits(n);
+            } else {
+                // doubled num is a single digit, add it
+                sum_of_all_digits += n;
+            }
+        } else {
+            // even position, add it without doubling
+            sum_of_all_digits += n;
         }
     }
-
-    1
+    let last = sum_of_all_digits % 10;
+    // return the last digit
+    last
 }
 
 #[test]
@@ -106,5 +104,6 @@ fn main() {
     //     // reversed_str.nth(1);
     //     print!("{}", ch);
     // }
-    luhn("4539 3195 0343 6476");
+    // luhn("4539 3195 0343 6476");
+    luhn("8273 1232 7352 0569");
 }
