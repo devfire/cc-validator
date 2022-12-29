@@ -1,11 +1,17 @@
 // TODO: remove this when you're done with your implementation.
-#![allow(unused_variables, dead_code)]
+// #![allow(unused_variables, dead_code)]
 
 pub fn luhn(cc_number: &str) -> bool {
     // first, let's remove all whitespace
     let cc: String = cc_number.split_whitespace().collect();
     println!("With whitespace removed: {}", cc);
 
+    /*
+    Failure conditions:
+    - non numeric characters
+    - length less than 2
+    - last digit is not zero
+    */
     if !cc.chars().all(char::is_numeric) || cc.len() < 2 || last_digit(cc) > 0 {
         false
     } else {
@@ -36,7 +42,6 @@ fn last_digit(cc: String) -> i32 {
         }
 
         // if the doubled number is two digits, we need to sum the digits before adding
-        // https://www.geeksforgeeks.org/program-for-sum-of-the-digits-of-a-given-number/
         sum_of_all_digits += sum_of_digits(n);
     }
     // return the last digit
@@ -80,21 +85,7 @@ fn test_invalid_cc_number() {
     assert!(!luhn("8273 1232 7352 0569"));
 }
 
-fn remove_whitespace(s: &str) -> String {
-    s.split_whitespace().collect()
-}
-
-#[allow(dead_code)]
+// #[allow(dead_code)]
 fn main() {
-    // let cc: &str = "4539 3195 0343 6476";
-    // // let reversed = remove_whitespace(&cc);
-
-    // let reversed_str = remove_whitespace(&cc);
-
-    // while let Some(ch) = reversed_str.chars().next() {
-    //     // reversed_str.nth(1);
-    //     print!("{}", ch);
-    // }
-    // luhn("4539 3195 0343 6476");
     luhn("8273 1232 7352 0569");
 }
